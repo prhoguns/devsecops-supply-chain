@@ -109,6 +109,8 @@ docker build -t demo-api . && docker run -p 8080:8080 demo-api
 
 ## Supply-chain hygiene in the pipeline itself
 
+- `main` is protected: a pull request cannot merge until all five gates pass, and force pushes and
+  branch deletion are blocked.
 - Every third-party action is pinned to a full commit SHA, not a tag.
 - Default token permissions are read-only; `packages`, `id-token` and `attestations` write access
   is granted only to the release job that needs it.
