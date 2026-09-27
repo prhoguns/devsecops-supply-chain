@@ -3,7 +3,9 @@ import struct
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from app.loadgen import hit
+import pytest
+
+from app.loadgen import hit, validate_url
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -45,3 +47,16 @@ def test_hit_survives_a_connection_reset():
         assert hit(f"http://127.0.0.1:{listener.getsockname()[1]}/", timeout=2) == 0
     finally:
         listener.close()
+
+
+@pytest.mark.parametrize("url", ["http://demo-api/api/work", "https://example.com/x"])
+def test_validate_url_accepts_http_and_https(url):
+    assert validate_url(url) == url
+
+
+@pytest.mark.parametrize(
+    "url", ["file:///etc/passwd", "ftp://host/file", "demo-api/api/work", "http://"]
+)
+def test_validate_url_rejects_other_schemes(url):
+    with pytest.raises(ValueError):
+        validate_url(url)

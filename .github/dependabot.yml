@@ -1,11 +1,16 @@
+# Updates wait a week after release before Dependabot proposes them. Most malicious package
+# releases are found and pulled within days; a cooldown keeps them out of this repo.
 version: 2
 updates:
   - package-ecosystem: pip
     directory: /
     schedule: { interval: weekly }
+    cooldown: { default-days: 7 }
   - package-ecosystem: docker
     directory: /
     schedule: { interval: weekly }
+    cooldown: { default-days: 7 }
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
+    cooldown: { default-days: 7 }

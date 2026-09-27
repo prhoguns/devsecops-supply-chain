@@ -72,9 +72,10 @@ jobs:
         with:
           persist-credentials: false
       - name: Semgrep
+        # p/default rather than p/python: p/python does not include the eval()/exec() audit rules.
         run: |
           docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:1.178.0 \
-            semgrep scan --config p/python --config p/dockerfile --config p/github-actions \
+            semgrep scan --config p/default --config p/dockerfile --config p/github-actions \
               --metrics off --error --sarif-output semgrep.sarif
       - name: Upload results to the Security tab
         if: always() && github.event_name != 'pull_request'
