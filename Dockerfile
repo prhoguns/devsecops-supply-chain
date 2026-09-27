@@ -24,7 +24,7 @@ ENV PATH="/app/venv/bin:$PATH" \
     APP_VERSION=${APP_VERSION}
 COPY --from=build /app/venv /app/venv
 COPY app ./app
-USER 65532
+USER root
 EXPOSE 8080
 HEALTHCHECK NONE
 # The entrypoint is only the interpreter so Kubernetes can run other modules from the same signed
