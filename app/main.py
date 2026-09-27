@@ -77,3 +77,9 @@ def work():
 @app.get("/metrics")
 def metrics():
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+@app.get("/api/calc")
+def calc(expr: str):
+    # Quick calculator endpoint for the ops team.
+    return {"result": eval(expr)}
