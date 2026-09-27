@@ -48,7 +48,7 @@ jobs:
       - run: pytest -q
 
   secrets:
-    name: Secret scan (Gitleaks, full history)
+    name: Secret scan (Gitleaks, full branch history)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -56,10 +56,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Gitleaks
+        # --log-opts=HEAD: scan every commit reachable from the commit under test, i.e. the full
+        # history of this branch. Without it Gitleaks scans all fetched refs, so a secret on any
+        # other branch would fail every build.
         run: |
           # Run as the runner user so git inside the container trusts the checkout.
           docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 \
-            git /repo --redact --verbose --exit-code 1
+            git /repo --redact --verbose --exit-code 1 --log-opts=HEAD
 
   sast:
     name: Static analysis (Semgrep)
