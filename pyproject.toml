@@ -1,0 +1,13 @@
+[project]
+name = "demo-api"
+version = "1.0.0"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+# Starlette now prefers httpx2 for its TestClient; httpx still works and is what the tests pin.
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]
+
+[tool.ruff]
+line-length = 100
