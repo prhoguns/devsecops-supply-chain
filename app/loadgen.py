@@ -11,13 +11,17 @@ import urllib.request
 
 
 def hit(url: str, timeout: float = 2.0) -> int:
-    """Request url once and return the HTTP status, or 0 if the connection failed."""
+    """Request url once and return the HTTP status, or 0 if the request failed at the network level.
+
+    Network errors (refused, reset, timed out) must never crash the generator: they happen
+    during every rolling update of the API, which is exactly when the traffic matters most.
+    """
     try:
         with urllib.request.urlopen(url, timeout=timeout) as response:
             return response.status
     except urllib.error.HTTPError as err:
         return err.code
-    except (urllib.error.URLError, TimeoutError):
+    except OSError:  # URLError, ConnectionResetError, TimeoutError, ...
         return 0
 
 

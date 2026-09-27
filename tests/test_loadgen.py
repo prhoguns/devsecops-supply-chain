@@ -1,3 +1,5 @@
+import socket
+import struct
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -24,3 +26,22 @@ def test_hit_reports_status_codes_and_connection_errors():
         server.shutdown()
         server.server_close()
     assert hit(base, timeout=0.5) == 0  # nothing listening any more
+
+
+def test_hit_survives_a_connection_reset():
+    # A server that accepts the connection and immediately resets it, like a pod being replaced.
+    listener = socket.socket()
+    listener.bind(("127.0.0.1", 0))
+    listener.listen()
+
+    def reset_one():
+        conn, _ = listener.accept()
+        # SO_LINGER on with a 0s timeout makes close() send a TCP RST instead of a FIN.
+        conn.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("ii", 1, 0))
+        conn.close()
+
+    threading.Thread(target=reset_one, daemon=True).start()
+    try:
+        assert hit(f"http://127.0.0.1:{listener.getsockname()[1]}/", timeout=2) == 0
+    finally:
+        listener.close()

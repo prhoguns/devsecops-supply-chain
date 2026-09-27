@@ -27,4 +27,7 @@ COPY app ./app
 USER 65532
 EXPOSE 8080
 HEALTHCHECK NONE
-ENTRYPOINT ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# The entrypoint is only the interpreter so Kubernetes can run other modules from the same signed
+# image (the load generator uses args: ["-m", "app.loadgen"]). CMD is the default: the API.
+ENTRYPOINT ["python"]
+CMD ["-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
