@@ -6,7 +6,9 @@ WORKDIR /app
 RUN python -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
+# --require-hashes: every package, including transitive ones, must match the SHA-256 recorded in
+# requirements.txt, so a tampered or swapped release on PyPI cannot be installed.
+RUN pip install --no-cache-dir --require-hashes -r requirements.txt \
     # pip is only needed to build. Removing it drops its vendored libraries (msgpack, setuptools
     # metadata), which Trivy flagged as HIGH even though nothing at runtime uses them.
     && pip uninstall -y pip

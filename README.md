@@ -89,7 +89,7 @@ so the platform's alerting can be demonstrated by changing one value in Git. `ap
 generates steady traffic and accepts only http(s) URLs. 14 unit tests.
 
 ```bash
-pip install -r requirements-dev.txt && pytest -q     # tests
+pip install --require-hashes -r requirements-dev.txt && pytest -q     # tests
 docker build -t demo-api . && docker run -p 8080:8080 demo-api
 ```
 
@@ -121,3 +121,7 @@ docker build -t demo-api . && docker run -p 8080:8080 demo-api
   That key is a deploy key scoped to the one GitOps repository, not a personal token.
 - Dependabot keeps pip packages, the base image digest and the actions up to date, a week after
   each release.
+- Python dependencies are locked by hash (`requirements.txt`, generated from `requirements.in`) and
+  installed with `--require-hashes`, so a swapped or tampered release on PyPI cannot be installed.
+- CodeQL scans the Python code and the workflows on every pull request, alongside Semgrep.
+- `SECURITY.md` explains how to report a vulnerability privately.

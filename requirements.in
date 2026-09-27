@@ -1,0 +1,5 @@
+# Direct dependencies. Edit this file, then regenerate the hash-locked requirements.txt:
+#   uv pip compile requirements.in --generate-hashes --universal -o requirements.txt
+fastapi==0.141.1
+uvicorn==0.54.0
+prometheus-client==0.26.0
