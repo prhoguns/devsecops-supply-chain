@@ -1,5 +1,8 @@
 # DevSecOps Supply Chain
 
+[![pipeline](https://github.com/prhoguns/devsecops-supply-chain/actions/workflows/pipeline.yml/badge.svg)](https://github.com/prhoguns/devsecops-supply-chain/actions/workflows/pipeline.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/prhoguns/devsecops-supply-chain/badge)](https://scorecard.dev/viewer/?uri=github.com/prhoguns/devsecops-supply-chain)
+
 _Status: Built and verified September 26–27, 2026. Every result below came from a real run._
 
 The build half of a two-repo setup. Every change to a small Python service goes through five
