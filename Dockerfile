@@ -1,5 +1,5 @@
 # Build stage: install dependencies into a virtualenv using the -dev variant (has pip and a shell).
-FROM cgr.dev/chainguard/python:latest-dev@sha256:eb0d45dfc69fecb471d2eaee7a8eea281bf860578ef44cb85db1bfa8165c47fe AS build
+FROM cgr.dev/chainguard/python:latest-dev@sha256:3fb87eac4bc040b0ee9e131b5fe5746db593b2e31cd08105ec49aa948eec3888 AS build
 # The build stage is discarded, so running it as root is fine; the runtime stage is non-root.
 USER root
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir --require-hashes -r requirements.txt \
     && pip uninstall -y pip
 
 # Runtime stage: minimal image with no shell or package manager, runs as non-root (uid 65532).
-FROM cgr.dev/chainguard/python:latest@sha256:565af762d7f3efedc4e60d7ac7815e41588211d3f5757be33d8303e915ee6c72
+FROM cgr.dev/chainguard/python:latest@sha256:1961420e5f93bd056d4b0b40eca12cdf01b3ed09177aa4d6ec71fab38cbf158f
 ARG APP_VERSION=dev
 LABEL org.opencontainers.image.source="https://github.com/prhoguns/devsecops-supply-chain" \
       org.opencontainers.image.description="demo-api built by the devsecops-supply-chain pipeline" \
